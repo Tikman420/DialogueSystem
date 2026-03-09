@@ -1,0 +1,10 @@
+{
+  "name":  "Randy",
+  "size": [ 228, 228 ],
+  "amount": 9,
+  "emotions": [
+    "neutral",
+    "sad",
+    "happy"
+  ]
+}
