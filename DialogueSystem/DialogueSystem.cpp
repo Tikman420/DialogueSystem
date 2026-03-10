@@ -33,7 +33,7 @@ int main() {
 
     sf::Clock deltaClock;
 
-    dialogue.StartDialogue(0);
+    dialogue.InitDialogue("Test");
     while (window.isOpen()) 
     {
         while (const auto event = window.pollEvent()) 
@@ -49,13 +49,19 @@ int main() {
 
         ImGui::SFML::Update(window, deltaClock.restart());
 
+        //show imgui's feature showcase window
         ImGui::ShowDemoWindow();
+
+        //show own menu
         DialogueTools::ShowDebugMenu(dialogue, window);
         ImGui::End();
 
         window.clear(sf::Color(255,255,255));
         window.draw(shape);
-        dialogue.Draw(window);
+        if (dialogue.currentDialogueName != "") 
+        {
+            dialogue.Draw(window);
+        }
         ImGui::SFML::Render(window);
         window.display();
     }

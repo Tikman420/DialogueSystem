@@ -1,0 +1,5 @@
+Hello world!
+This is a <!>Test</!> for this new dialogue system!
+<e:Happy> it is actually a really cool system <w> It even features whispering
+It evenHasTextWrappingThisoneGoesUpTo40Characters \n but it also does word based wrapping of course!
+anyways that is basically it! thanks for using!
