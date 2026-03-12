@@ -1,75 +1,135 @@
-#include <imgui.h>
-#include <misc/cpp/imgui_stdlib.h>
-#include <imgui-SFML.h>
+#include "DialogueSystem.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-
-#include <iostream>
-
-#include "DialougeTools.h"
-
-std::string Images = "Game/Images/";
-sf::Font font = sf::Font("Game/Fonts/Roboto-Regular.ttf");
-
-bool showCollision;
-
-int main() {
-    sf::RenderWindow window(sf::VideoMode({ 1920, 1080 }), "Dialogue Test", sf::Style::None);
-    if (!ImGui::SFML::Init(window)) 
+namespace DialogueTools
+{
+    std::vector<std::string> ImportText(std::string file)
     {
-        return -1;
+        //UwU: impwementot
+        std::vector<std::string> result;
+        std::ifstream source = std::ifstream(file, std::ios::ate);
+
+        int size = source.tellg();
+        source.seekg(0);
+
+        std::string str;
+        //https://stackoverflow.com/questions/13035674/how-to-read-a-file-line-by-line-or-a-whole-text-file-at-once
+        while (std::getline(source, str))
+        {
+            std::cout << str << std::endl;
+            result.emplace_back(str);
+        }
+
+        return result;
     }
 
-    DialogueTools::DialogueSystem dialogue;
-
-    std::string dialogueName = std::string();
-    std::vector<std::string>* dialogueBuffer = new std::vector<std::string>();
-    dialogueBuffer->push_back("Hello World!");
-
-    sf::CircleShape shape(100.0f);
-    shape.setFillColor(sf::Color::Green);
-
-    sf::Clock deltaClock;
-
-    dialogue.InitDialogue("Test");
-    while (window.isOpen()) 
+    DialogueSystem::DialogueSystem()
     {
-        while (const auto event = window.pollEvent()) 
-        {
-            ImGui::SFML::ProcessEvent(window, *event);
-            dialogue.ProcessEvent(window, *event);
+        mainWindow.setFillColor(backgroundColor);
+        resetTransform();
+        mainWindow.setOrigin(sf::Vector2(backGroundSize.x / 2, backGroundSize.y / 2));
+        profile.setOrigin(sf::Vector2f(profile.getTextureRect().size.x / 2, profile.getTextureRect().size.y / 2));
+        profile.setScale(sf::Vector2f(1.5, 1.5));
+        dialogueText.setPosition(backGroundPosition - sf::Vector2f(300, backGroundSize.y / 2 - 20));
+        dialogueText.setCharacterSize(45);
 
-            if (event->is<sf::Event::Closed>() || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape))
+        //debug
+        dialogueBuffer->push_back("Hello World!");
+    }
+
+    void DialogueSystem::ProcessEvent(const sf::RenderWindow& window, const sf::Event& event)
+    {
+        if (currentDialogueName == "")
+        {
+            return;
+        }
+
+        if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>())
+        {
+            if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
             {
-                window.close();
+                NextDialogue();
             }
         }
-
-        ImGui::SFML::Update(window, deltaClock.restart());
-
-        //show imgui's feature showcase window
-        ImGui::ShowDemoWindow();
-
-        //show own menu
-        DialogueTools::ShowDebugMenu(dialogue, window);
-        ImGui::End();
-
-        window.clear(sf::Color(255,255,255));
-        window.draw(shape);
-        if (dialogue.currentDialogueName != "") 
-        {
-            dialogue.Draw(window);
-        }
-        ImGui::SFML::Render(window);
-        window.display();
     }
 
-    ImGui::SFML::Shutdown();
-}
+    void DialogueSystem::Draw(sf::RenderWindow& window)
+    {
+        mainWindow.setPosition(backGroundPosition);
+        mainWindow.setSize(backGroundSize);
+        window.draw(mainWindow);
 
-float** sf::Vec2ToFloat(sf::Vector2f& origin)
-{
-    return new float*[2]{ &origin.x, &origin.y };
+        profile.setPosition(backGroundPosition + sf::Vector2f(-510, 0));
+        window.draw(profile);
+
+        window.draw(TypeWriter(dialogueText));
+    }
+
+    void DialogueSystem::RenderText(sf::Text& dialogueBox, std::string text)
+    {
+        WordWrapping(text, WrappingCount);
+        dialogueBox.setString(text);
+    }
+
+    void DialogueSystem::WordWrapping(std::string& text, int wrapLength)
+    {
+        int lastSpace = 0;
+        int lastEnter = 0;
+        for (int i = 0; i < text.size(); i++)
+        {
+            if (text[i] == ' ' || text[i] == '\n')
+            {
+                lastSpace = i;
+            }
+
+            if (i - lastSpace > wrapLength)
+            {
+                text.insert(i, "-\n");
+                lastSpace = lastEnter = i;
+                continue;
+            }
+
+            if (i - lastEnter > wrapLength)
+            {
+                text[lastSpace] = '\n';
+                lastEnter = lastSpace;
+            }
+        }
+    }
+
+    sf::Text DialogueTools::DialogueSystem::TypeWriter(sf::Text writer)
+    {
+        return writer;
+    }
+
+    void DialogueSystem::InitDialogue(std::string dialogueName)
+    {
+        currentDialogueName = dialogueName;
+
+        *dialogueBuffer = ImportText("Game/" + dialogueName + ".txt");
+
+        StartDialogue(0);
+    }
+
+    void DialogueSystem::StartDialogue(int index)
+    {
+        if (index >= dialogueBuffer->size())
+        {
+            currentDialogueName = "";
+            return;
+        }
+
+        RenderText(dialogueText, (*dialogueBuffer)[index]);
+        currentDialogue = index;
+    }
+
+    void DialogueSystem::NextDialogue()
+    {
+        StartDialogue(currentDialogue + 1);
+    }
+
+    const void DialogueSystem::resetTransform()
+    {
+        backGroundPosition = defaultPosition;
+        backGroundSize = defaultSize;
+    }
 }

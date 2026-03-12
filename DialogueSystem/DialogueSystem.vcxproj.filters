@@ -18,7 +18,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DialogueSystem.cpp">
+    <ClCompile Include="Example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\Libraries\imgui-1.91.1\imgui.cpp">
@@ -39,15 +39,24 @@
     <ClCompile Include="..\..\..\..\..\..\..\Libraries\imgui-1.91.1\imgui-SFML.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="DialougeTools.cpp">
+    <ClCompile Include="DialogueTools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\Libraries\imgui-1.91.1\misc\cpp\imgui_stdlib.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
+    <ClCompile Include="DialogueSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DialougeTools.h">
+    <ClInclude Include="DialogueTools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogueSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
