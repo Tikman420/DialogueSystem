@@ -8,6 +8,4 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
-extern sf::Font font;
-extern std::string Images;
+#include "genericTools.h"

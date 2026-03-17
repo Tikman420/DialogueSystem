@@ -11,8 +11,3 @@ namespace DialogueTools
     void ShowEditMenu();
     void ShowDebugMenu(DialogueSystem& system, sf::RenderWindow& window);
 }
-
-namespace sf 
-{
-    float** Vec2ToFloat(Vector2f& origin);
-}

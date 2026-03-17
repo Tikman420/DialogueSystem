@@ -16,9 +16,9 @@ namespace DialogueTools
         const sf::Vector2f defaultPosition = sf::Vector2f(960, 892);
         const sf::Vector2f defaultSize = sf::Vector2f(1410, 382);
 
-        //TypeWriter settings (not implemented yet)
-        const sf::Time normalDelay = sf::milliseconds(123);
-        const sf::Time PunctuationDelay = sf::milliseconds(235);
+        //TypeWriter settings
+        const float normalDelay = 0.05;
+        const float punctuationDelay = 0.1;
 
         int WrappingCount = 40; //in pixels
 
@@ -29,7 +29,8 @@ namespace DialogueTools
         sf::Text dialogueText = sf::Text(font);
 
         //typewriter stuff
-        sf::Clock typewriterTimer;
+        int currentChar;
+        float typewriterTimer = 0;
 
     public:
         sf::Vector2f backGroundPosition;

@@ -3,8 +3,8 @@
 #include "DialogueTools.h"
 #include "DialogueSystem.h"
 
+sf::Font font = sf::Font("Game/Fonts/Roboto-Regular.ttf");;
 std::string Images = "Game/Images/";
-sf::Font font = sf::Font("Game/Fonts/Roboto-Regular.ttf");
 
 bool showCollision;
 
@@ -29,6 +29,7 @@ int main() {
     dialogue.InitDialogue("Test");
     while (window.isOpen()) 
     {
+        Tools::UpdateDeltaTime();
         while (const auto event = window.pollEvent()) 
         {
             ImGui::SFML::ProcessEvent(window, *event);
@@ -55,6 +56,7 @@ int main() {
         {
             dialogue.Draw(window);
         }
+        Tools::RenderFPS(window);
         ImGui::SFML::Render(window);
         window.display();
     }

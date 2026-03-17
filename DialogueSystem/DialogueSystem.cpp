@@ -38,6 +38,10 @@ namespace DialogueTools
 
     void DialogueSystem::ProcessEvent(const sf::RenderWindow& window, const sf::Event& event)
     {
+        //set deltatime to unhook speeds from the framecount
+        sf::Clock fpsTimer;
+        sf::Text fpsCounter(font);
+
         if (currentDialogueName == "")
         {
             return;
@@ -98,6 +102,31 @@ namespace DialogueTools
 
     sf::Text DialogueTools::DialogueSystem::TypeWriter(sf::Text writer)
     {
+        std::string text = writer.getString();
+        if (currentChar != text.size() && typewriterTimer <= 0)
+        {
+
+            char character = text[currentChar];
+            if (character == '.' || character == '?' || character == '!' || character == '*' || 
+                character == ',' || character == '/' || character == '\\' || character == ';' || 
+                character == ':' || character == '-')
+            {
+                typewriterTimer = punctuationDelay;
+            }
+            else 
+            {
+                typewriterTimer = normalDelay;
+            }
+
+            currentChar++;
+        }
+        else if (currentChar != text.size())
+        {
+            typewriterTimer -= Tools::GetDeltaTime();
+        }
+
+        text.erase(currentChar, text.size() - currentChar);
+        writer.setString(text);
         return writer;
     }
 
@@ -120,6 +149,8 @@ namespace DialogueTools
 
         RenderText(dialogueText, (*dialogueBuffer)[index]);
         currentDialogue = index;
+        currentChar = 0;
+        typewriterTimer = 0;
     }
 
     void DialogueSystem::NextDialogue()

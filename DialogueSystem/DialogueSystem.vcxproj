@@ -149,10 +149,12 @@
     <ClCompile Include="DialogueSystem.cpp" />
     <ClCompile Include="Example.cpp" />
     <ClCompile Include="DialogueTools.cpp" />
+    <ClCompile Include="genericTools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DialogueSystem.h" />
     <ClInclude Include="DialogueTools.h" />
+    <ClInclude Include="genericTools.h" />
     <ClInclude Include="Include.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
