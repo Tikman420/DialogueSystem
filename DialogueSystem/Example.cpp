@@ -26,6 +26,7 @@ int main() {
 
     sf::Clock deltaClock;
 
+    //dialogue.InitDialogue("BMovie");
     dialogue.InitDialogue("Test");
     while (window.isOpen()) 
     {

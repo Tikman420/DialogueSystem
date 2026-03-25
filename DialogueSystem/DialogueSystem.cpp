@@ -65,29 +65,43 @@ namespace DialogueTools
         profile.setPosition(backGroundPosition + sf::Vector2f(-510, 0));
         window.draw(profile);
 
-        window.draw(TypeWriter(dialogueText));
+        int length = 0;
+        //window.draw(TypeWriter(dialogueText));
+        for (auto i = dialogueTexts.begin(); i != dialogueTexts.end(); i++) 
+        {
+            window.draw(TypeWriter(*i, length));
+            length += i->getString().getSize();
+        }
     }
 
-    void DialogueSystem::RenderText(sf::Text& dialogueBox, std::string text)
+    void DialogueSystem::ProcessText(sf::Text& dialogueBox)
     {
+        sf::String text = dialogueBox.getString();
         WordWrapping(text, WrappingCount);
         dialogueBox.setString(text);
     }
 
-    void DialogueSystem::WordWrapping(std::string& text, int wrapLength)
+    void DialogueSystem::WordWrapping(sf::String& text, int wrapLength)
     {
         int lastSpace = 0;
         int lastEnter = 0;
-        for (int i = 0; i < text.size(); i++)
+        int currentText = 0;
+        for (int i = 0; i < text.getSize(); i++)
         {
             if (text[i] == ' ' || text[i] == '\n')
             {
                 lastSpace = i;
+                continue;
             }
 
             if (i - lastSpace > wrapLength)
             {
-                text.insert(i, "-\n");
+                sf::String original = dialogueTexts[currentText].getString();
+                original.insert(i-3, "-");
+                dialogueTexts[currentText].setString(original);
+                SplitText(currentText, i - lastEnter);
+                currentText++;
+                Wrap(currentText);
                 lastSpace = lastEnter = i;
                 continue;
             }
@@ -95,18 +109,48 @@ namespace DialogueTools
             if (i - lastEnter > wrapLength)
             {
                 text[lastSpace] = '\n';
+                SplitText(currentText, lastSpace - lastEnter);
+                currentText++;
+                Wrap(currentText);
                 lastEnter = lastSpace;
             }
         }
     }
 
-    sf::Text DialogueTools::DialogueSystem::TypeWriter(sf::Text writer)
+    void DialogueSystem::Wrap(int wrappedTextIndex) 
+    {
+        float spacing = dialogueTexts[wrappedTextIndex].getLineSpacing() + dialogueTexts[wrappedTextIndex].getCharacterSize();
+        dialogueTexts[wrappedTextIndex].setPosition(dialogueTexts[wrappedTextIndex-1].getPosition() + sf::Vector2f(0, spacing));
+    }
+
+    void DialogueSystem::SplitText(int originalTextIndex, int cutoff) 
+    {
+        std::string original = dialogueTexts[originalTextIndex].getString();
+        sf::Text newText = sf::Text(dialogueTexts[originalTextIndex]);
+        std::string newLine = original.substr(cutoff);
+        if (newLine[0] == ' ')
+        {
+            newLine = newLine.substr(1);
+        }
+
+        newText.setString(newLine);
+        newText.setPosition(dialogueTexts[originalTextIndex].findCharacterPos(cutoff));
+
+        dialogueTexts[originalTextIndex].setString(original.substr(0,cutoff));
+        dialogueTexts.insert(dialogueTexts.begin() + originalTextIndex + 1, newText);
+    }
+
+    sf::Text DialogueSystem::TypeWriter(sf::Text writer, int offset)
     {
         std::string text = writer.getString();
-        if (currentChar != text.size() && typewriterTimer <= 0)
+        if (currentChar - offset < 0 || currentChar - offset >= text.size())
         {
-
-            char character = text[currentChar];
+            std::cout << ((currentChar - offset < 0) ? "true" : "false") + std::to_string(currentChar) + std::string(" smaller: ") + ((currentChar - offset > text.size()) ? "true" : "false") << std::endl;
+            goto setString;
+        }
+        if (currentChar - offset != text.size() && typewriterTimer <= 0)
+        {
+            char character = text[currentChar-offset];
             if (character == '.' || character == '?' || character == '!' || character == '*' || 
                 character == ',' || character == '/' || character == '\\' || character == ';' || 
                 character == ':' || character == '-')
@@ -120,12 +164,24 @@ namespace DialogueTools
 
             currentChar++;
         }
-        else if (currentChar != text.size())
+        else if (currentChar - offset != text.size())
         {
             typewriterTimer -= Tools::GetDeltaTime();
         }
 
-        text.erase(currentChar, text.size() - currentChar);
+    setString:
+        if (currentChar-offset >= text.size() && currentChar - offset > 0)
+        {
+            return writer;
+        }
+        if (currentChar - offset > 0)
+        {
+            text.erase(currentChar - offset);
+        }
+        else
+        {
+            text.erase(0);
+        }
         writer.setString(text);
         return writer;
     }
@@ -147,7 +203,12 @@ namespace DialogueTools
             return;
         }
 
-        RenderText(dialogueText, (*dialogueBuffer)[index]);
+        dialogueText.setString((*dialogueBuffer)[index]);
+
+        dialogueTexts.clear();
+        dialogueTexts.emplace_back(dialogueText);
+
+        ProcessText(dialogueText);
         currentDialogue = index;
         currentChar = 0;
         typewriterTimer = 0;

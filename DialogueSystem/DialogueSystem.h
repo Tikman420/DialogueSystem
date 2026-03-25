@@ -31,6 +31,7 @@ namespace DialogueTools
         //typewriter stuff
         int currentChar;
         float typewriterTimer = 0;
+        std::vector<sf::Text> dialogueTexts = std::vector<sf::Text>();
 
     public:
         sf::Vector2f backGroundPosition;
@@ -45,9 +46,11 @@ namespace DialogueTools
         const void resetTransform();
 
         //text handling
-        void RenderText(sf::Text& dialogueBox, std::string text);
-        static void WordWrapping(std::string& text, int wrapLength);
-        sf::Text TypeWriter(sf::Text writer);
+        void ProcessText(sf::Text& dialogueBox);
+        void WordWrapping(sf::String& text, int wrapLength);
+        void Wrap(int wrappedTextIndex);
+        void SplitText(int originalTextIndex, int cutoff);
+        sf::Text TypeWriter(sf::Text writer, int offset);
 
         //dialogue control
         void ProcessEvent(const sf::RenderWindow& window, const sf::Event& event);
