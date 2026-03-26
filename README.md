@@ -12,9 +12,16 @@ right now it is ***only*** displaying the dialogue located at Game/Test.txt
 (Follow the manual install instructions on ImGui-SFML and you'll probably be fine)
   (also add "opengl32.lib" to Linker > Input > Additional Dependencies)
 
+**Features**
+============
+* Dialogue History
+* Dialogue styling (almost done)
+* debug tools with Imgui
+* Example program
+
 **Planned:**
 =============
-* Dialogue History
 * Dialogue styling
+* character emotions
 * events
 * more/better debug tools
