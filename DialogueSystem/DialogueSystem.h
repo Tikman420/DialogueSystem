@@ -1,5 +1,6 @@
 #pragma once
 #include "Include.h"
+#include "RichText.h"
 
 extern sf::Font font;
 extern std::string Images;
@@ -16,22 +17,11 @@ namespace DialogueTools
         const sf::Vector2f defaultPosition = sf::Vector2f(960, 892);
         const sf::Vector2f defaultSize = sf::Vector2f(1410, 382);
 
-        //TypeWriter settings
-        const float normalDelay = 0.05;
-        const float punctuationDelay = 0.1;
-
-        int WrappingCount = 40; //in pixels
-
         //other stuff not changable
         sf::RectangleShape mainWindow = sf::RectangleShape(backGroundSize);
         sf::Texture* profileTexture = new sf::Texture(Images + "ProfilesPlaceHolder.png");
         sf::Sprite profile = sf::Sprite(*profileTexture, sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(228, 228)));
         sf::Text dialogueText = sf::Text(font);
-
-        //typewriter stuff
-        int currentChar;
-        float typewriterTimer = 0;
-        std::vector<sf::Text> dialogueTexts = std::vector<sf::Text>();
 
     public:
         sf::Vector2f backGroundPosition;
@@ -40,17 +30,13 @@ namespace DialogueTools
 
         std::string currentDialogueName = std::string();
         std::vector<std::string>* dialogueBuffer = new std::vector<std::string>();
+        std::vector<sf::Text>* History = new std::vector<sf::Text>();
+        RichText dialogueTexts;
 
         DialogueSystem();
+        ~DialogueSystem();
         void Draw(sf::RenderWindow& window);
         const void resetTransform();
-
-        //text handling
-        void ProcessText(sf::Text& dialogueBox);
-        void WordWrapping(sf::String& text, int wrapLength);
-        void Wrap(int wrappedTextIndex);
-        void SplitText(int originalTextIndex, int cutoff);
-        sf::Text TypeWriter(sf::Text writer, int offset);
 
         //dialogue control
         void ProcessEvent(const sf::RenderWindow& window, const sf::Event& event);
