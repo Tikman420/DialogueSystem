@@ -1,6 +1,7 @@
 #pragma once
 #include "Include.h"
 #include "RichText.h"
+#include "History.h"
 
 extern sf::Font font;
 extern std::string Images;
@@ -30,7 +31,7 @@ namespace DialogueTools
 
         std::string currentDialogueName = std::string();
         std::vector<std::string>* dialogueBuffer = new std::vector<std::string>();
-        std::vector<sf::Text>* History = new std::vector<sf::Text>();
+        History* history = new History();
         RichText dialogueTexts;
 
         DialogueSystem();

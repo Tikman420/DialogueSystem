@@ -150,12 +150,14 @@
     <ClCompile Include="Example.cpp" />
     <ClCompile Include="DialogueTools.cpp" />
     <ClCompile Include="genericTools.cpp" />
+    <ClCompile Include="History.cpp" />
     <ClCompile Include="RichText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DialogueSystem.h" />
     <ClInclude Include="DialogueTools.h" />
     <ClInclude Include="genericTools.h" />
+    <ClInclude Include="History.h" />
     <ClInclude Include="Include.h" />
     <ClInclude Include="RichText.h" />
   </ItemGroup>

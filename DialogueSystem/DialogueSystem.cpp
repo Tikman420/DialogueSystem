@@ -31,15 +31,12 @@ namespace DialogueTools
         profile.setScale(sf::Vector2f(1.5, 1.5));
         dialogueText.setPosition(backGroundPosition - sf::Vector2f(300, backGroundSize.y / 2 - 20));
         dialogueText.setCharacterSize(45);
-
-        //debug
-        dialogueBuffer->push_back("Hello World!");
     }
 
     DialogueSystem::~DialogueSystem() 
     {
         delete dialogueBuffer;
-        delete History;
+        delete history;
         delete profileTexture;
     }
 
@@ -79,6 +76,15 @@ namespace DialogueTools
         window.draw(profile);
 
         dialogueTexts.Draw(window);
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Tab))
+        {
+            history->Draw(window);
+        }
+        else 
+        {
+            history->ButtonPrompt(window);
+        }
     }
 
     void DialogueSystem::InitDialogue(std::string dialogueName)
@@ -101,6 +107,7 @@ namespace DialogueTools
         dialogueText.setString((*dialogueBuffer)[index]);
 
         dialogueTexts.ProcessText(dialogueText);
+        history->items.emplace_back(sf::Text(font, dialogueTexts.rawText, 45));
         currentDialogue = index;
     }
 
