@@ -151,6 +151,7 @@
     <ClCompile Include="DialogueTools.cpp" />
     <ClCompile Include="genericTools.cpp" />
     <ClCompile Include="History.cpp" />
+    <ClCompile Include="Profile.cpp" />
     <ClCompile Include="RichText.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +160,7 @@
     <ClInclude Include="genericTools.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="Include.h" />
+    <ClInclude Include="Profile.h" />
     <ClInclude Include="RichText.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

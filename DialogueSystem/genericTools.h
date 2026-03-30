@@ -1,8 +1,15 @@
 #pragma once
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <fstream>
 
 extern sf::Font font;
+
+namespace DialogueTools 
+{
+	std::vector<std::string> ImportText(std::filesystem::path file);
+}
 
 namespace Tools 
 {

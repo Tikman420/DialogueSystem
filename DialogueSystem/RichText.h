@@ -28,8 +28,10 @@ namespace DialogueTools
     public:
         std::vector<sf::Text> Texts = std::vector<sf::Text>();
         sf::String rawText;
+        std::vector<int> emotionLocs = std::vector<int>();
+        std::vector<std::string> emotions = std::vector<std::string>();
 
-        int currentChar;
+        int currentChar = 0;
 
         void Draw(sf::RenderWindow& window);
         void ProcessText(sf::Text& dialogueBox);

@@ -29,9 +29,11 @@ void History::Draw(sf::RenderWindow& window)
 	}
 }
 
-void History::ButtonPrompt(sf::RenderWindow& window) 
+void History::ButtonPrompt(sf::RenderWindow& window)
 {
 	prompt.setFillColor(sf::Color(0, 0, 0, 255));
-	prompt.setPosition(sf::Vector2f(0, window.getSize().y - prompt.getCharacterSize()));
+	prompt.setPosition(sf::Vector2f(prompt.getCharacterSize(), window.getSize().y - prompt.getCharacterSize() * 2));
+	prompt.setStyle(sf::Text::Bold);
 	window.draw(prompt);
 }
+	

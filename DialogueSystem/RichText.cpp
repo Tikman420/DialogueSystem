@@ -98,6 +98,8 @@ namespace DialogueTools
 
     sf::String RichText::Effects(std::vector<std::string> seperatedWords)
     {
+        emotionLocs.clear();
+        emotions.clear();
         sf::String removed;
         int length = 0;
         int currentText = 0;
@@ -139,6 +141,14 @@ namespace DialogueTools
                 Texts[currentText].setStyle(sf::Text::Italic);
                 Texts[currentText].setCharacterSize(whisperSize);
                 length = 0;
+                continue;
+            }
+            if (seperatedWords[i].find("<e:") != -1) 
+            {
+                Texts[currentText].setString(Texts[currentText].getString().substring(seperatedWords[i].size()+1));
+                length -= seperatedWords[i].size();
+                emotionLocs.emplace_back(length);
+                emotions.emplace_back(seperatedWords[i].substr(3, seperatedWords[i].size()-4));
                 continue;
             }
             removed += seperatedWords[i] + " ";

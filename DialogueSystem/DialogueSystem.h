@@ -2,13 +2,14 @@
 #include "Include.h"
 #include "RichText.h"
 #include "History.h"
+#include "Profile.h"
 
 extern sf::Font font;
 extern std::string Images;
 
 namespace DialogueTools
 {
-    std::vector<std::string> ImportText(std::string file);
+    //std::vector<std::string> ImportText(std::string file);
 
     class DialogueSystem
     {
@@ -20,8 +21,7 @@ namespace DialogueTools
 
         //other stuff not changable
         sf::RectangleShape mainWindow = sf::RectangleShape(backGroundSize);
-        sf::Texture* profileTexture = new sf::Texture(Images + "ProfilesPlaceHolder.png");
-        sf::Sprite profile = sf::Sprite(*profileTexture, sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(228, 228)));
+        Profile profile = Profile(Images + "ProfilesPlaceHolder.png", defaultPosition + sf::Vector2f(-510, 0));
         sf::Text dialogueText = sf::Text(font);
 
     public:
