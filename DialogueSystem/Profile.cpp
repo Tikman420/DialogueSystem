@@ -6,7 +6,8 @@ void DialogueTools::Profile::SetEmotion(std::string emotionName)
 {
 	std::transform(emotionName.begin(), emotionName.end(), emotionName.begin(), 
 		[](unsigned char c) { return std::tolower(c); });
-	currentemotion = (*profileDictionary)[emotionName];
+	currentemotionIndex = (*profileDictionary)[emotionName];
+	currentEmotion = emotionName;
 }
 
 void DialogueTools::Profile::LoadJson(std::filesystem::path JsonLocation)
@@ -16,7 +17,6 @@ void DialogueTools::Profile::LoadJson(std::filesystem::path JsonLocation)
 
 	for (auto i = items.begin(); i != items.end(); i++) 
 	{
-
 		if (i->find("\"") == -1)
 		{
 			continue;
@@ -64,7 +64,7 @@ void DialogueTools::Profile::LoadJson(std::filesystem::path JsonLocation)
 
 void DialogueTools::Profile::Draw(sf::RenderWindow& window) 
 {
-	window.draw((*emotions)[currentemotion]);
+	window.draw((*emotions)[currentemotionIndex]);
 }
 
 DialogueTools::Profile::Profile(std::filesystem::path profileLocation, sf::Vector2f position)

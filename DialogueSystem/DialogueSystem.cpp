@@ -1,7 +1,10 @@
 #include "DialogueSystem.h"
 
+extern float deltaTime;
+
 namespace DialogueTools
 {
+    //setup dialogue window
     DialogueSystem::DialogueSystem()
     {
         //profile = Profile(Images + "ProfilesPlaceHolder.png", backGroundPosition + sf::Vector2f(-510, 0));
@@ -13,12 +16,14 @@ namespace DialogueTools
         dialogueText.setCharacterSize(45);
     }
 
+    //remove dialogue window
     DialogueSystem::~DialogueSystem() 
     {
         delete dialogueBuffer;
         delete history;
     }
 
+    //process if player wants to go further
     void DialogueSystem::ProcessEvent(const sf::RenderWindow& window, const sf::Event& event)
     {
         //set deltatime to unhook speeds from the framecount
@@ -45,21 +50,49 @@ namespace DialogueTools
         }
     }
 
-    int currentemotion = 0;
+    //draw window
     void DialogueSystem::Draw(sf::RenderWindow& window)
     {
         mainWindow.setPosition(backGroundPosition);
         mainWindow.setSize(backGroundSize);
         window.draw(mainWindow);
 
-        profile.Draw(window);
-
         dialogueTexts.Draw(window);
-        if (currentemotion != dialogueTexts.emotionLocs.size() && dialogueTexts.currentChar == dialogueTexts.emotionLocs[currentemotion])
+        int emotionIndex = 0;
+        if (emotionIndex != dialogueTexts.emotionLocs.size() && dialogueTexts.currentChar >= dialogueTexts.emotionLocs[emotionIndex])
         { 
-            profile.SetEmotion(dialogueTexts.emotions[currentemotion]);
-            currentemotion++;
+            currentEmotion = dialogueTexts.emotions[emotionIndex];
+            profile.SetEmotion(currentEmotion);
+            emotionIndex++;
         }
+
+        if (dialogueTexts.currentChar != currentChar && dialogueTexts.currentChar % characterPerTalk == characterPerTalk-1) 
+        {
+            profile.SetEmotion(currentEmotion + ((profile.currentEmotion == currentEmotion) ? "talk" : ""));
+            currentChar = dialogueTexts.currentChar;
+        }
+        //do blinking
+        if (blinkTimer >= blink)
+        {
+            profile.SetEmotion(currentEmotion + "blink");
+
+            if (blinkStayTimer >= blinkLength)
+            {
+                profile.SetEmotion(currentEmotion);
+                blinkTimer = 0;
+                blinkStayTimer = 0;
+            }
+            else 
+            {
+                blinkStayTimer += deltaTime;
+            }
+        }
+        else 
+        {
+            blinkTimer += deltaTime;
+        }
+
+        profile.Draw(window);
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Tab))
         {
@@ -71,6 +104,7 @@ namespace DialogueTools
         }
     }
 
+    //start a new dialogue
     void DialogueSystem::InitDialogue(std::string dialogueName)
     {
         currentDialogueName = dialogueName;
@@ -80,6 +114,7 @@ namespace DialogueTools
         StartDialogue(0);
     }
 
+    //start the text for the dialogue
     void DialogueSystem::StartDialogue(int index)
     {
         if (index >= dialogueBuffer->size())
@@ -95,11 +130,13 @@ namespace DialogueTools
         currentDialogue = index;
     }
 
+    //advance to the next dialogue
     void DialogueSystem::NextDialogue()
     {
         StartDialogue(currentDialogue + 1);
     }
 
+    //reset the transform of the dialogue window to the default values
     const void DialogueSystem::resetTransform()
     {
         backGroundPosition = defaultPosition;

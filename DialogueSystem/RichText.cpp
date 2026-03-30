@@ -145,9 +145,19 @@ namespace DialogueTools
             }
             if (seperatedWords[i].find("<e:") != -1) 
             {
-                Texts[currentText].setString(Texts[currentText].getString().substring(seperatedWords[i].size()+1));
-                length -= seperatedWords[i].size();
-                emotionLocs.emplace_back(length);
+                if (removed.getSize() == 0) 
+                {
+                    Texts[currentText].setString(Texts[currentText].getString().substring(seperatedWords[i].size() + 1));
+                    length -= seperatedWords[i].size();
+                }
+                else 
+                {
+                    SplitText(currentText, length, seperatedWords[i].size() + 2);
+                    currentText++;
+                    length = 0;
+                }
+
+                emotionLocs.emplace_back(removed.getSize());
                 emotions.emplace_back(seperatedWords[i].substr(3, seperatedWords[i].size()-4));
                 continue;
             }

@@ -6,8 +6,6 @@
 sf::Font font = sf::Font("Game/Fonts/Roboto-Regular.ttf");;
 std::string Images = "Game/Images/";
 
-bool showCollision;
-
 int main() {
     sf::RenderWindow window(sf::VideoMode({ 1920, 1080 }), "Dialogue Test", sf::Style::None);
     if (!ImGui::SFML::Init(window)) 

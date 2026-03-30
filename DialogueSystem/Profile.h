@@ -11,7 +11,8 @@ namespace DialogueTools
 		sf::Texture texture;
 		sf::Vector2i spriteSize;
 	public:
-		int currentemotion;
+		int currentemotionIndex;
+		std::string currentEmotion;
 		std::string profileName;
 
 		void SetEmotion(std::string emotionName);
