@@ -3,9 +3,6 @@
 #include "DialogueTools.h"
 #include "DialogueSystem.h"
 
-sf::Font font = sf::Font("Game/Fonts/Roboto-Regular.ttf");;
-std::string Images = "Game/Images/";
-
 int main() {
     sf::RenderWindow window(sf::VideoMode({ 1920, 1080 }), "Dialogue Test", sf::Style::None);
     if (!ImGui::SFML::Init(window)) 
@@ -41,9 +38,6 @@ int main() {
         }
 
         ImGui::SFML::Update(window, deltaClock.restart());
-
-        //show imgui's feature showcase window
-        ImGui::ShowDemoWindow();
 
         //show own menu
         DialogueTools::ShowDebugMenu(dialogue, window);

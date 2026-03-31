@@ -19,9 +19,9 @@ namespace DialogueTools
         float typewriterTimer = 0;
 
         //text handling
-        void WordWrapping(sf::String& text, int wrapLength);
-        void Wrap(int wrappedTextIndex);
-        void SplitText(int originalTextIndex, int cutoff, int removeableLength);
+        void WordWrapping(const sf::String& text, int wrapLength);
+        void Wrap(const int& wrappedTextIndex);
+        void SplitText(const int& originalTextIndex, const int& cutoff, const int& removeableLength);
         sf::String Effects(std::vector<std::string> seperatedWords);
         std::vector<std::string> words = std::vector<std::string>();
 

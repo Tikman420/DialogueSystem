@@ -30,7 +30,7 @@ namespace DialogueTools
         }
     }
 
-    void RichText::WordWrapping(sf::String& text, int wrapLength)
+    void RichText::WordWrapping(const sf::String& text, int wrapLength)
     {
         int lastSpace = 0;
         int lastEnter = 0;
@@ -43,6 +43,10 @@ namespace DialogueTools
                 if (words.back()[0] == ' ')
                 {
                     words.back() = words.back().substr(1);
+                }
+                if (lastEnter == lastSpace && lastEnter != 0) 
+                {
+                    words.back().insert(0, "\n");
                 }
 
                 lastSpace = i;
@@ -63,7 +67,6 @@ namespace DialogueTools
 
             if (i - lastEnter > wrapLength)
             {
-                text[lastSpace] = '\n';
                 SplitText(currentText, lastSpace - lastEnter,0);
                 currentText++;
                 Wrap(currentText);
@@ -73,13 +76,13 @@ namespace DialogueTools
         words.emplace_back(text.substring(lastSpace+1));
     }
 
-    void RichText::Wrap(int wrappedTextIndex)
+    void RichText::Wrap(const int& wrappedTextIndex)
     {
         float spacing = Texts[wrappedTextIndex].getLineSpacing() + Texts[wrappedTextIndex].getCharacterSize();
         Texts[wrappedTextIndex].setPosition(Texts[wrappedTextIndex - 1].getPosition() + sf::Vector2f(0, spacing));
     }
 
-    void RichText::SplitText(int originalTextIndex, int cutoff, int removeableLength)
+    void RichText::SplitText(const int& originalTextIndex, const int& cutoff, const int& removeableLength)
     {
         std::string original = Texts[originalTextIndex].getString();
         sf::Text newText = sf::Text(Texts[originalTextIndex]);

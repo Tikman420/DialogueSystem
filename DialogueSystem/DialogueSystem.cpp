@@ -2,6 +2,9 @@
 
 extern float deltaTime;
 
+sf::Font font = sf::Font("Game/Fonts/Roboto-Regular.ttf");
+std::string Images = "Game/Images/";
+
 namespace DialogueTools
 {
     //setup dialogue window
@@ -50,7 +53,8 @@ namespace DialogueTools
         }
     }
 
-    //draw window
+    //draw text window
+    int emotionIndex = 0;
     void DialogueSystem::Draw(sf::RenderWindow& window)
     {
         mainWindow.setPosition(backGroundPosition);
@@ -58,7 +62,6 @@ namespace DialogueTools
         window.draw(mainWindow);
 
         dialogueTexts.Draw(window);
-        int emotionIndex = 0;
         if (emotionIndex != dialogueTexts.emotionLocs.size() && dialogueTexts.currentChar >= dialogueTexts.emotionLocs[emotionIndex])
         { 
             currentEmotion = dialogueTexts.emotions[emotionIndex];
@@ -66,7 +69,7 @@ namespace DialogueTools
             emotionIndex++;
         }
 
-        if (dialogueTexts.currentChar != currentChar && dialogueTexts.currentChar % characterPerTalk == characterPerTalk-1) 
+        if (dialogueTexts.currentChar != currentChar && dialogueTexts.currentChar % characterPerTalk == 0) 
         {
             profile.SetEmotion(currentEmotion + ((profile.currentEmotion == currentEmotion) ? "talk" : ""));
             currentChar = dialogueTexts.currentChar;
@@ -128,6 +131,7 @@ namespace DialogueTools
         dialogueTexts.ProcessText(dialogueText);
         history->items.emplace_back(sf::Text(font, dialogueTexts.rawText, 45));
         currentDialogue = index;
+        emotionIndex = 0;
     }
 
     //advance to the next dialogue
