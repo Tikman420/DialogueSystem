@@ -64,23 +64,23 @@ namespace DialogueTools
         if (emotionIndex != dialogueTexts.emotionLocs.size() && dialogueTexts.currentChar >= dialogueTexts.emotionLocs[emotionIndex])
         { 
             currentEmotion = dialogueTexts.emotions[emotionIndex];
-            profile.SetEmotion(currentEmotion);
+            profiles[dialogueTexts.currentSpeaker].SetEmotion(currentEmotion);
             emotionIndex++;
         }
 
         if (dialogueTexts.currentChar != currentChar && dialogueTexts.currentChar % characterPerTalk == 0) 
         {
-            profile.SetEmotion(currentEmotion + ((profile.currentEmotion == currentEmotion) ? "talk" : ""));
+            profiles[dialogueTexts.currentSpeaker].SetEmotion(currentEmotion + ((profiles[dialogueTexts.currentSpeaker].currentEmotion == currentEmotion) ? "talk" : ""));
             currentChar = dialogueTexts.currentChar;
         }
         //do blinking
         if (blinkTimer >= blink)
         {
-            profile.SetEmotion(currentEmotion + "blink");
+            profiles[dialogueTexts.currentSpeaker].SetEmotion(currentEmotion + "blink");
 
             if (blinkStayTimer >= blinkLength)
             {
-                profile.SetEmotion(currentEmotion);
+                profiles[dialogueTexts.currentSpeaker].SetEmotion(currentEmotion);
                 blinkTimer = 0;
                 blinkStayTimer = 0;
             }
@@ -94,7 +94,7 @@ namespace DialogueTools
             blinkTimer += deltaTime;
         }
 
-        profile.Draw(window);
+        profiles[dialogueTexts.currentSpeaker].Draw(window);
 
         window.draw(nameWindow);
         window.draw(name);
@@ -132,7 +132,7 @@ namespace DialogueTools
 
         dialogueTexts.ProcessText(dialogueText);
         history->items.emplace_back(sf::Text(font, dialogueTexts.rawText, 45));
-        name.setString(profile.profileName);
+        name.setString(profiles[dialogueTexts.currentSpeaker].profileName);
         currentDialogue = index;
         emotionIndex = 0;
     }

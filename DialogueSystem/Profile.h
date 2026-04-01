@@ -12,13 +12,14 @@ namespace DialogueTools
 
 		//complete texture of the spritesheet
 		sf::Texture texture;
+		const sf::Vector2f position = sf::Vector2f(450, 892);
 	public:
 		//the size of each sprite
 		sf::Vector2i spriteSize;
 		//which emotion is it currently on
-		int currentemotionIndex;
+		int currentemotionIndex = 0;
 		//current emotion in text
-		std::string currentEmotion;
+		std::string currentEmotion = "neutral";
 		//name of the character
 		std::string profileName;
 
@@ -31,9 +32,10 @@ namespace DialogueTools
 		void Draw(sf::RenderWindow& window);
 
 		//constructors/destructors
-		Profile(std::filesystem::path profileLocation, sf::Vector2f position);
+		Profile(std::filesystem::path profileLocation);
 		Profile() = default;
-		Profile(Profile& other);
+		Profile(const Profile& other);
+		Profile& operator=(const Profile& other);
 		~Profile();
 	};
 }

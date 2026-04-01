@@ -2,7 +2,7 @@
 #include "Include.h"
 #include "RichText.h"
 #include "History.h"
-#include "Profile.h"
+#include "profile.h"
 
 extern sf::Font font;
 extern std::string Images;
@@ -13,7 +13,7 @@ namespace DialogueTools
     class DialogueSystem
     {
     private:
-        //profile animation variables
+        //profiles animation variables
         const float blink = 2;
         const float blinkLength = 0.15;
         const int characterPerTalk = 2;
@@ -28,13 +28,13 @@ namespace DialogueTools
         float blinkStayTimer = 0;
         int currentChar = 0;
         sf::RectangleShape mainWindow = sf::RectangleShape(Size);
-        Profile profile = Profile(Images + "ProfilesPlaceHolder.png", Position + sf::Vector2f(-510, 0));
+        std::vector<Profile> profiles = { Profile(Images + "profilesPlaceHolder.png"), Profile(Images + "2ndcharacter.png") };
         sf::Text dialogueText = sf::Text(font);
 
         const sf::Vector2f namePosition = sf::Vector2f(255, 641);
         const sf::Vector2f nameSize = sf::Vector2f(466, 60);
         const sf::Vector2f padding = sf::Vector2f(15,10);
-        sf::RectangleShape nameWindow = sf::RectangleShape(sf::Vector2f(profile.spriteSize));
+        sf::RectangleShape nameWindow = sf::RectangleShape();
         sf::Text name = sf::Text(font, "NAME", 40);
 
     public:

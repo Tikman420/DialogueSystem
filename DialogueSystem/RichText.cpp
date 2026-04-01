@@ -187,7 +187,10 @@ namespace DialogueTools
             //change Character
             if (seperatedWords[i].find("<c:") != -1) 
             {
-                currentSpeaker == atoi(seperatedWords[i].c_str());
+                currentSpeaker = atoi(seperatedWords[i].substr(3, seperatedWords[i].size()-3).c_str());
+                Texts[currentText].setString(std::string(Texts[currentText].getString()).erase(removed.getSize(), seperatedWords[i].size()+1));
+                length -= seperatedWords[i].size();
+                continue;
             }
             removed += seperatedWords[i] + " ";
         }

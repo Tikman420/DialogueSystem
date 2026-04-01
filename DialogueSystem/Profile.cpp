@@ -76,7 +76,7 @@ void DialogueTools::Profile::Draw(sf::RenderWindow& window)
 	window.draw((*emotions)[currentemotionIndex]);
 }
 
-DialogueTools::Profile::Profile(std::filesystem::path profileLocation, sf::Vector2f position)
+DialogueTools::Profile::Profile(std::filesystem::path profileLocation)
 {
 	//load the spritesheet and extra data
 	texture.loadFromFile(profileLocation);
@@ -93,13 +93,35 @@ DialogueTools::Profile::Profile(std::filesystem::path profileLocation, sf::Vecto
 	}
 }
 
-DialogueTools::Profile::Profile(Profile& other)
+DialogueTools::Profile::Profile(const Profile& other)
 {
+	//delete profileDictionary;
+	*profileDictionary = *other.profileDictionary;
+
+	//delete emotions;
+	*emotions = *other.emotions;
+
+	texture = other.texture;
+	spriteSize = other.spriteSize;
+	profileName = other.profileName;
+
+	for (auto i = emotions->begin(); i != emotions->end(); i++) 
+	{
+		i->setTexture(texture);
+	}
+}
+
+DialogueTools::Profile& DialogueTools::Profile::operator=(const Profile& other)
+{
+	Profile temp(other);
+
 	delete profileDictionary;
-	profileDictionary = other.profileDictionary;
+	temp.profileDictionary = new std::map<std::string, int>(*temp.profileDictionary);
 
 	delete emotions;
-	emotions = other.emotions;
+	temp.emotions = new std::vector<sf::Sprite>(*temp.emotions);
+
+	return temp;
 }
 
 DialogueTools::Profile::~Profile()
