@@ -1,4 +1,5 @@
 #include "DialogueTools.h"
+//stuff to draw the dialogue debug tools
 
 namespace DialogueTools 
 {
@@ -68,18 +69,18 @@ namespace DialogueTools
             system.NextDialogue();
         }
 
-        if (ImGui::TreeNode("dialogue transform")) 
+        /*if (ImGui::TreeNode("dialogue transform")) 
         {
-            ImGui::VSliderFloat("Pos.X", ImVec2(18, 160), &system.backGroundPosition.x, 0, window.getSize().x); ImGui::SameLine();
-            ImGui::VSliderFloat("Pos.Y", ImVec2(18, 160), &system.backGroundPosition.y, 0, window.getSize().y); ImGui::SameLine();
-            ImGui::VSliderFloat("Size.X", ImVec2(18, 160), &system.backGroundSize.x, 0, window.getSize().x); ImGui::SameLine();
-            ImGui::VSliderFloat("Size.Y", ImVec2(18, 160), &system.backGroundSize.y, 0, window.getSize().y);
+            ImGui::VSliderFloat("Pos.X", ImVec2(18, 160), &system.namePosition.x, 0, window.getSize().x); ImGui::SameLine();
+            ImGui::VSliderFloat("Pos.Y", ImVec2(18, 160), &system.namePosition.y, 0, window.getSize().y); ImGui::SameLine();
+            ImGui::VSliderFloat("Size.X", ImVec2(18, 160), &system.nameSize.x, 0, window.getSize().x); ImGui::SameLine();
+            ImGui::VSliderFloat("Size.Y", ImVec2(18, 160), &system.nameSize.y, 0, window.getSize().y);
             if (ImGui::Button("Reset Transform"))
             {
                 system.resetTransform();
             }
             ImGui::TreePop();
-        }
+        }*/
 
         if (ImGui::BeginPopup("Load settings"))
         {

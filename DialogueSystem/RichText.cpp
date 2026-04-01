@@ -2,14 +2,18 @@
 
 namespace DialogueTools
 {
+    //preprocess the text
     void RichText::ProcessText(sf::Text& dialogueBox)
     {
         sf::String text = dialogueBox.getString();
 
+        //reset vectors
         words.clear();
         Texts.clear();
+        //set first text
         Texts.emplace_back(dialogueBox);
 
+        //put effects on the text
         WordWrapping(text, WrappingCount);
         rawText = Effects(words);
         dialogueBox.setString(text);
@@ -22,7 +26,7 @@ namespace DialogueTools
     void RichText::Draw(sf::RenderWindow& window) 
     {
         int length = 0;
-        //window.draw(TypeWriter(dialogueText));
+        //draw each text
         for (auto i = Texts.begin(); i != Texts.end(); i++)
         {
             window.draw(TypeWriter(*i, length));
@@ -30,6 +34,7 @@ namespace DialogueTools
         }
     }
 
+    //wrap words
     void RichText::WordWrapping(const sf::String& text, int wrapLength)
     {
         int lastSpace = 0;
@@ -37,6 +42,7 @@ namespace DialogueTools
         int currentText = 0;
         for (int i = 0; i < text.getSize(); i++)
         {
+            //split the words for later
             if (text[i] == ' ' || text[i] == '\n')
             {
                 words.emplace_back(text.substring(lastSpace, i-lastSpace));
@@ -53,6 +59,7 @@ namespace DialogueTools
                 continue;
             }
 
+            //if the word is longer than wraplength
             if (i - lastSpace > wrapLength)
             {
                 sf::String original = Texts[currentText].getString();
@@ -65,6 +72,7 @@ namespace DialogueTools
                 continue;
             }
 
+            //if the amount of characters is more than wraplength
             if (i - lastEnter > wrapLength)
             {
                 SplitText(currentText, lastSpace - lastEnter,0);
@@ -73,6 +81,7 @@ namespace DialogueTools
                 lastEnter = lastSpace;
             }
         }
+        //add last word to the word list
         words.emplace_back(text.substring(lastSpace+1));
     }
 
@@ -87,28 +96,35 @@ namespace DialogueTools
         std::string original = Texts[originalTextIndex].getString();
         sf::Text newText = sf::Text(Texts[originalTextIndex]);
         std::string newLine = original.substr(cutoff);
+
+        //remove space if it's in the text
         if (newLine[0] == ' ')
         {
             newLine = newLine.substr(1);
         }
 
+        //set the new text
         newText.setString(newLine);
         newText.setPosition(Texts[originalTextIndex].findCharacterPos(cutoff-removeableLength+1));
 
+        //cut the original text back before removableLength
         Texts[originalTextIndex].setString(original.substr(0, cutoff-removeableLength));
         Texts.insert(Texts.begin() + originalTextIndex + 1, newText);
     }
 
-    sf::String RichText::Effects(std::vector<std::string> seperatedWords)
+    const sf::String RichText::Effects(std::vector<std::string> seperatedWords)
     {
+        //reset emotions
         emotionLocs.clear();
         emotions.clear();
         sf::String removed;
         int length = 0;
         int currentText = 0;
 
+        //check per word if its one of the following effects
         for (int i = 0; i != seperatedWords.size(); i++)
         {
+            //apply changes to the next text
             if (seperatedWords[i][0] == '\n')
             {
                 seperatedWords[i] = seperatedWords[i].substr(1);
@@ -116,6 +132,7 @@ namespace DialogueTools
                 currentText++;
             }
             length += seperatedWords[i].size() + 1;
+            //make important
             if (seperatedWords[i] == "<!>")
             {
                 SplitText(currentText, length, 4);
@@ -126,6 +143,7 @@ namespace DialogueTools
                 length = 0;
                 continue;
             }
+            //undo effects
             if (seperatedWords[i].find("</") != -1)
             {
                 SplitText(currentText, length, seperatedWords[i].size()+1);
@@ -136,6 +154,7 @@ namespace DialogueTools
                 length = 0;
                 continue;
             }
+            //wisper effect
             if (seperatedWords[i] == "<w>")
             {
                 SplitText(currentText, length, 4);
@@ -146,6 +165,7 @@ namespace DialogueTools
                 length = 0;
                 continue;
             }
+            //change emotion
             if (seperatedWords[i].find("<e:") != -1) 
             {
                 if (removed.getSize() == 0) 
@@ -164,40 +184,43 @@ namespace DialogueTools
                 emotions.emplace_back(seperatedWords[i].substr(3, seperatedWords[i].size()-4));
                 continue;
             }
+            //change Character
+            if (seperatedWords[i].find("<c:") != -1) 
+            {
+                currentSpeaker == atoi(seperatedWords[i].c_str());
+            }
             removed += seperatedWords[i] + " ";
         }
         return removed;
     }
 
-    sf::Text RichText::TypeWriter(sf::Text writer, int offset)
+    const sf::Text RichText::TypeWriter(sf::Text writer, int offset)
     {
         std::string text = writer.getString();
-        if (currentChar - offset < 0 || currentChar - offset >= text.size())
+        //only do writing when it is this texts turn
+        if (currentChar - offset >= 0 && currentChar - offset < text.size())
         {
-            goto setString;
-        }
-        if (currentChar - offset != text.size() && typewriterTimer <= 0)
-        {
-            char character = text[currentChar - offset];
-            if (character == '.' || character == '?' || character == '!' || character == '*' ||
-                character == ',' || character == '/' || character == '\\' || character == ';' ||
-                character == ':' || character == '-')
+            if (currentChar - offset != text.size() && typewriterTimer <= 0)
             {
-                typewriterTimer = punctuationDelay;
-            }
-            else
-            {
-                typewriterTimer = normalDelay;
-            }
+                char character = text[currentChar - offset];
+                if (punctuation.find(character) != punctuation.end())
+                {
+                    typewriterTimer = punctuationDelay;
+                }
+                else
+                {
+                    typewriterTimer = normalDelay;
+                }
 
-            currentChar++;
-        }
-        else if (currentChar - offset != text.size())
-        {
-            typewriterTimer -= Tools::GetDeltaTime();
+                currentChar++;
+            }
+            else if (currentChar - offset != text.size())
+            {
+                typewriterTimer -= Tools::GetDeltaTime();
+            }
         }
 
-    setString:
+        //apply the amount erased
         if (currentChar - offset >= text.size() && currentChar - offset > 0)
         {
             return writer;

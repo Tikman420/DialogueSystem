@@ -2,6 +2,7 @@
 
 void History::Draw(sf::RenderWindow& window) 
 {
+	//initializer
 	if (Background.getSize() == sf::Vector2f(0,0))
 	{
 		Background.setSize(sf::Vector2f(window.getSize()));
@@ -10,9 +11,12 @@ void History::Draw(sf::RenderWindow& window)
 		header.setOrigin(header.getLocalBounds().size/(float)2);
 		header.setPosition(sf::Vector2f(window.getSize().x/2, 50));
 	}
+
+	//draw the background and the header
 	window.draw(Background);
 	window.draw(header);
 
+	//draw the text from history if it's under a certain position
 	int amount = 1;
 	for (int i = items.size()-1; i != -1; i--) 
 	{
@@ -29,6 +33,7 @@ void History::Draw(sf::RenderWindow& window)
 	}
 }
 
+//draw button prompt
 void History::ButtonPrompt(sf::RenderWindow& window)
 {
 	prompt.setFillColor(sf::Color(0, 0, 0, 255));

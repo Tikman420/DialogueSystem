@@ -10,12 +10,13 @@ namespace DialogueTools
     //setup dialogue window
     DialogueSystem::DialogueSystem()
     {
-        //profile = Profile(Images + "ProfilesPlaceHolder.png", backGroundPosition + sf::Vector2f(-510, 0));
         mainWindow.setFillColor(backgroundColor);
         resetTransform();
-        mainWindow.setOrigin(sf::Vector2(backGroundSize.x / 2, backGroundSize.y / 2));
+        mainWindow.setOrigin(sf::Vector2(Size.x / 2, Size.y / 2));
+        nameWindow.setFillColor(backgroundColor);
+        name.setPosition(namePosition + padding);
         
-        dialogueText.setPosition(backGroundPosition - sf::Vector2f(300, backGroundSize.y / 2 - 20));
+        dialogueText.setPosition(Position - sf::Vector2f(300, Size.y / 2 - 20));
         dialogueText.setCharacterSize(45);
     }
 
@@ -57,8 +58,6 @@ namespace DialogueTools
     int emotionIndex = 0;
     void DialogueSystem::Draw(sf::RenderWindow& window)
     {
-        mainWindow.setPosition(backGroundPosition);
-        mainWindow.setSize(backGroundSize);
         window.draw(mainWindow);
 
         dialogueTexts.Draw(window);
@@ -97,6 +96,9 @@ namespace DialogueTools
 
         profile.Draw(window);
 
+        window.draw(nameWindow);
+        window.draw(name);
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Tab))
         {
             history->Draw(window);
@@ -130,6 +132,7 @@ namespace DialogueTools
 
         dialogueTexts.ProcessText(dialogueText);
         history->items.emplace_back(sf::Text(font, dialogueTexts.rawText, 45));
+        name.setString(profile.profileName);
         currentDialogue = index;
         emotionIndex = 0;
     }
@@ -143,7 +146,10 @@ namespace DialogueTools
     //reset the transform of the dialogue window to the default values
     const void DialogueSystem::resetTransform()
     {
-        backGroundPosition = defaultPosition;
-        backGroundSize = defaultSize;
+        mainWindow.setPosition(Position);
+        mainWindow.setSize(Size);
+
+        nameWindow.setPosition(namePosition);
+        nameWindow.setSize(nameSize);
     }
 }

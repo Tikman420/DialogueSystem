@@ -8,17 +8,20 @@ extern sf::Font font;
 
 namespace DialogueTools 
 {
-	std::vector<std::string> ImportText(std::filesystem::path file);
+	//import a file based on lines
+	std::vector<std::string> ImportText(const std::filesystem::path& file);
 }
 
 namespace Tools 
 {
+	//deltatime / fps counter stuff
 	void UpdateDeltaTime();
-	float GetDeltaTime();
+	const float GetDeltaTime();
 	void RenderFPS(sf::RenderWindow& window);
 }
 
 namespace sf
 {
+	//conversion from vector2 to float array
 	float** Vec2ToFloat(Vector2f& origin);
 }
