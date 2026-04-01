@@ -12,17 +12,10 @@ int main() {
 
     DialogueTools::DialogueSystem dialogue;
 
-    std::string dialogueName = std::string();
-    std::vector<std::string>* dialogueBuffer = new std::vector<std::string>();
-    dialogueBuffer->push_back("Hello World!");
-
-    sf::CircleShape shape(100.0f);
-    shape.setFillColor(sf::Color::Green);
-
     sf::Clock deltaClock;
 
     //dialogue.InitDialogue("BMovie");
-    dialogue.InitDialogue("Test");
+    dialogue.InitDialogue("Test", { Images + "profilesPlaceHolder.png", Images + "2ndcharacter.png" });
     while (window.isOpen()) 
     {
         Tools::UpdateDeltaTime();
@@ -44,7 +37,6 @@ int main() {
         ImGui::End();
 
         window.clear(sf::Color(255,255,255));
-        window.draw(shape);
         if (dialogue.currentDialogueName != "") 
         {
             dialogue.Draw(window);

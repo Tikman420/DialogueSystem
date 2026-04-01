@@ -110,11 +110,17 @@ namespace DialogueTools
     }
 
     //start a new dialogue
-    void DialogueSystem::InitDialogue(std::string dialogueName)
+    void DialogueSystem::InitDialogue(std::string dialogueName, std::vector<std::string> characters)
     {
         currentDialogueName = dialogueName;
 
         *dialogueBuffer = ImportText("Game/" + dialogueName + ".txt");
+
+        profiles.clear();
+        for (auto i = characters.begin(); i != characters.end(); i++) 
+        {
+            profiles.emplace_back(Profile(*i));
+        }
 
         StartDialogue(0);
     }

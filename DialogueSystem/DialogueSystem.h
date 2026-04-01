@@ -28,7 +28,7 @@ namespace DialogueTools
         float blinkStayTimer = 0;
         int currentChar = 0;
         sf::RectangleShape mainWindow = sf::RectangleShape(Size);
-        std::vector<Profile> profiles = { Profile(Images + "profilesPlaceHolder.png"), Profile(Images + "2ndcharacter.png") };
+        std::vector<Profile> profiles;
         sf::Text dialogueText = sf::Text(font);
 
         const sf::Vector2f namePosition = sf::Vector2f(255, 641);
@@ -53,7 +53,7 @@ namespace DialogueTools
 
         //dialogue control
         void ProcessEvent(const sf::RenderWindow& window, const sf::Event& event);
-        void InitDialogue(std::string dialogueName);
+        void InitDialogue(std::string dialogueName, std::vector<std::string> characters);
         void StartDialogue(int index);
         void NextDialogue();
     };
