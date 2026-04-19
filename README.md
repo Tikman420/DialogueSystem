@@ -1,5 +1,3 @@
-If you found this tool randomly just wait like a month since this is not ready jet
-
 I originally made this tool for unity but I wanted to move to a custom engine + I wanted to try ImGui out.
 right now it is ***only*** displaying the dialogue located at Game/Test.txt
 
@@ -21,7 +19,5 @@ right now it is ***only*** displaying the dialogue located at Game/Test.txt
 
 **Planned:**
 =============
-* Dialogue styling
-* character emotions
 * events
 * more/better debug tools
